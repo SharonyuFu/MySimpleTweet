@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweet.models.Tweet;
 
 import java.util.ArrayList;
@@ -29,18 +30,25 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet tweet = getItem(position);
-        if (convertView != null){
+
+        if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
         }
 
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        TextView time = (TextView) convertView.findViewById(R.id.timw);
 
         tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
+        time.setText(tweet.getRelativeTimeAgo(tweet.getCreatedAt()));
+
 
         ivProfileImage.setImageResource(android.R.color.transparent);
+        Glide.with(getContext())
+                .load(tweet.getUser().getProfilImgUrl())
+                .into(ivProfileImage);
 
 
         return convertView;

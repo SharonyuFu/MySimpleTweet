@@ -10,6 +10,11 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import static com.loopj.android.http.AsyncHttpClient.log;
+
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -24,7 +29,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
-	public static final String REST_URL = "https://api.twitter.com/1.1/"; // Change this, base API URL
+	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
 	public static final String REST_CONSUMER_KEY = "CoIw1RFbhqmrWQ6wrR3lcWhBi";       // Change this
 	public static final String REST_CONSUMER_SECRET = "ZNl0xi7qGXwv1JfmVuHGM3R6FRahbEUlUoe0DMWAUvUzBV8Lo6"; // Change this
 	public static final String REST_CALLBACK_URL = "oauth://ShaSimpleTweet"; // Change this (here and in manifest)
@@ -39,17 +44,29 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getHomeTimeline(AsyncHttpResponseHandler handler){
 		String apiUrl= getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count",10);
+		params.put("count",25);
 		params.put("since_id",1);
+
 
 		getClient().get(apiUrl,params,handler);
 	}
 
-	public void postTweet(String body, AsyncHttpResponseHandler handler) {
+
+	public void getUserInfo(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		client.get(apiUrl, null, handler);
+	}
+
+	public void postUpdateStatus(String text, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
-		RequestParams params = new RequestParams();
-		params.put("status", body);
-		getClient().post(apiUrl, params, handler);
+		String encodedText;
+		try {
+			encodedText = URLEncoder.encode(text, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			return;
+		}
+		apiUrl = apiUrl + "?status=" + encodedText;
+		client.post(apiUrl, null, handler);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

@@ -31,11 +31,13 @@ public class User {
 
     public static User fromJson(JSONObject jsonObject){
         User u = new User();
+
         try {
             u.name = jsonObject.getString("name");
-            u.uid = jsonObject.getLong("uid");
+            u.uid = jsonObject.getLong("id");
             u.screenName = jsonObject.getString("screen_name");
             u.profilImgUrl= jsonObject.getString("profile_image_url");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

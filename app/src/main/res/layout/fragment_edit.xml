@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/twitter"
+        android:id="@+id/img_porfile"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp" />
+
+    <TextView
+        android:text="@string/account"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:id="@+id/uAccoun"
+        android:layout_below="@+id/uName"
+        android:layout_alignLeft="@+id/uName"
+        android:layout_alignStart="@+id/uName" />
+
+    <TextView
+        android:text="SharonFu"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/uName"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/img_porfile"
+        android:layout_toStartOf="@+id/img_porfile" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:lines="8"
+        android:gravity="top|left"
+        android:inputType="textPersonName"
+        android:hint="@string/edCon"
+        android:ems="10"
+        android:id="@+id/etContent"
+        android:layout_below="@+id/uAccoun"
+        android:layout_marginTop="24dp"
+        android:layout_alignRight="@+id/btn_Tweet"
+        android:layout_alignEnd="@+id/btn_Tweet"
+        android:padding="10dp" />
+
+    <Button
+        android:text="@string/tweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/btn_Tweet"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/uAccoun"
+        android:layout_toEndOf="@+id/uAccoun" />
+
+    <TextView
+        android:text="140"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_Tweet"
+        android:layout_toLeftOf="@+id/btn_Tweet"
+        android:layout_marginBottom="14dp"
+        android:id="@+id/tweetCount"
+        android:layout_alignLeft="@+id/uAccoun"
+        android:layout_alignStart="@+id/uAccoun" />
+
+</RelativeLayout>
