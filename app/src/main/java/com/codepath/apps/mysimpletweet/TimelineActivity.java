@@ -32,12 +32,15 @@ import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
 import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.id;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity{
 
     private TwitterClient client;
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet>tweets;
     private ListView lvTweets;
+
+
+
 
 
 

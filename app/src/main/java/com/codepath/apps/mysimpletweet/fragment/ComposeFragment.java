@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,11 +46,9 @@ import static com.loopj.android.http.AsyncHttpClient.log;
  * Created by sharonyu on 2017/3/5.
  */
 
-public class ComposeFragment extends DialogFragment{
+public class ComposeFragment extends DialogFragment {
+    
 
-    public interface EditNameDialogListener {
-        void onFinishEditDialog(String inputText);
-    }
 
 
     private EditText etContent;
