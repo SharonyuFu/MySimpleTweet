@@ -35,7 +35,7 @@ import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.id;
 import static com.loopj.android.http.AsyncHttpClient.log;
 import static java.util.Collections.addAll;
 
-public class TimelineActivity extends AppCompatActivity  {
+public class TimelineActivity extends AppCompatActivity implements ComposeDialogListener{
 
     private TwitterClient client;
 
@@ -76,6 +76,8 @@ public class TimelineActivity extends AppCompatActivity  {
 
             }
         });
+
+
 
     }
 
@@ -154,4 +156,8 @@ public class TimelineActivity extends AppCompatActivity  {
 
 
 
+    @Override
+    public void onComposed(Tweet tweet) {
+        aTweets.add(tweet);
+    }
 }

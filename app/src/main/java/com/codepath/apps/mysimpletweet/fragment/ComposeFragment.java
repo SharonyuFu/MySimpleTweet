@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweet.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -55,11 +56,6 @@ import static java.util.Collections.addAll;
 
 public class ComposeFragment extends DialogFragment {
 
-
-
-
-
-
     private EditText etContent;
     private TextView uAccount;
     private TextView uName;
@@ -68,15 +64,14 @@ public class ComposeFragment extends DialogFragment {
     private TextView tweetCount;
     private TweetsArrayAdapter aTweets;
     private TwitterClient client;
-
-
-
-    public Tweet newTweet = new Tweet();
+    private OnTweetPostListener listener;
+    public interface OnTweetPostListener {
+        public void onTweetPost(Tweet tweet);
+    }
 
     public ComposeFragment(){
 
     }
-
 
 
     public static ComposeFragment newInstance(String title) {
@@ -98,7 +93,6 @@ public class ComposeFragment extends DialogFragment {
                         .load(account.getUserInfo())
                         .into(img_profile);
 
-
             }
 
             @Override
@@ -110,7 +104,6 @@ public class ComposeFragment extends DialogFragment {
 
 
     }
-
 
 
 
@@ -145,9 +138,6 @@ public class ComposeFragment extends DialogFragment {
         populateProfile();
 
         btn_tweet = (Button) view.findViewById(R.id.btn_Tweet);
-
-
-
         btn_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,12 +149,8 @@ public class ComposeFragment extends DialogFragment {
 
 
 
-
         return view;
     }
-
-
-
 
 
 
@@ -180,7 +166,12 @@ public class ComposeFragment extends DialogFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 Log.d("d",json.toString());
 
+                Tweet tweet = new Tweet();
 
+                listener.onTweetPost(tweet.fromJSON(json));
+                log.d("d",tweet.fromJSON(json).toString());
+                ComposeDialogListener composeDialogListener = (ComposeDialogListener)getActivity();
+                composeDialogListener.onComposed(tweet.fromJSON(json));
                 dismiss();
 
             }
@@ -195,7 +186,6 @@ public class ComposeFragment extends DialogFragment {
 
 
     }
-
 
 
 
