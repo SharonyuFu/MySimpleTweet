@@ -33,14 +33,19 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
 import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.id;
 import static com.loopj.android.http.AsyncHttpClient.log;
+import static java.util.Collections.addAll;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeDialogListener {
+public class TimelineActivity extends AppCompatActivity  {
 
     private TwitterClient client;
+
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet>tweets;
     private ListView lvTweets;
 
+    public TweetsArrayAdapter getaTweets() {
+        return aTweets;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         aTweets = new TweetsArrayAdapter(this,tweets);
         lvTweets.setAdapter(aTweets);
 
+
+
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
@@ -66,6 +73,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
                 loadNextDataFromApi(page);
                 // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
+
             }
         });
 
@@ -140,11 +148,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         editNameDialogFragment.show(fm, "fragment_edit_name");
 
 
-    }
-
-    @Override
-    public void onComposed(Tweet tweet) {
-        aTweets.add(tweet);
 
     }
+
+
+
+
 }

@@ -41,17 +41,23 @@ import org.w3c.dom.Text;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.app.Activity.RESULT_OK;
 import static com.codepath.apps.mysimpletweet.R.id.ivProfileImage;
 import static com.codepath.apps.mysimpletweet.R.string.tweet;
 import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
 import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.name;
 import static com.loopj.android.http.AsyncHttpClient.log;
+import static java.util.Collections.addAll;
 
 /**
  * Created by sharonyu on 2017/3/5.
  */
 
 public class ComposeFragment extends DialogFragment {
+
+
+
+
 
 
     private EditText etContent;
@@ -63,9 +69,15 @@ public class ComposeFragment extends DialogFragment {
     private TweetsArrayAdapter aTweets;
     private TwitterClient client;
 
+
+
+    public Tweet newTweet = new Tweet();
+
     public ComposeFragment(){
 
     }
+
+
 
     public static ComposeFragment newInstance(String title) {
         ComposeFragment frag = new ComposeFragment();
@@ -146,6 +158,8 @@ public class ComposeFragment extends DialogFragment {
         });
 
 
+
+
         return view;
     }
 
@@ -154,15 +168,21 @@ public class ComposeFragment extends DialogFragment {
 
 
 
+
+
+
     private void postTweet() {
         final String tweetBody = etContent.getText().toString();
+        Log.d("d",tweetBody);
 
         client.postUpdateStatus(tweetBody, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 Log.d("d",json.toString());
 
+
                 dismiss();
+
             }
 
             @Override
@@ -175,6 +195,9 @@ public class ComposeFragment extends DialogFragment {
 
 
     }
+
+
+
 
 
 
