@@ -8,6 +8,7 @@ import android.content.Context;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.io.UnsupportedEncodingException;
@@ -42,14 +43,20 @@ public class TwitterClient extends OAuthBaseClient {
 	// DEFINE METHODS for different API endpoints here
 
 	public void getHomeTimeline(AsyncHttpResponseHandler handler){
+		getHomeTimeline(null,handler);
+	}
+
+	public void getHomeTimeline(Long maxId, AsyncHttpResponseHandler handler){
 		String apiUrl= getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count",25);
-		params.put("since_id",1);
-
-
+		if(maxId!=null) {
+			params.put("max_id", maxId);
+		}
 		getClient().get(apiUrl,params,handler);
 	}
+
+
 
 
 	public void getUserInfo(AsyncHttpResponseHandler handler) {
@@ -59,14 +66,9 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public void postUpdateStatus(String text, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
-		String encodedText;
-		try {
-			encodedText = URLEncoder.encode(text, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			return;
-		}
-		apiUrl = apiUrl + "?status=" + encodedText;
-		client.post(apiUrl, null, handler);
+		RequestParams params = new RequestParams();
+		params.put("status",text);
+		client.post(apiUrl, params, handler);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

@@ -8,11 +8,13 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,10 +22,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweet.ComposeDialogListener;
 import com.codepath.apps.mysimpletweet.R;
 import com.codepath.apps.mysimpletweet.TimelineActivity;
 import com.codepath.apps.mysimpletweet.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweet.TwitterClient;
+import com.codepath.apps.mysimpletweet.models.Account;
 import com.codepath.apps.mysimpletweet.models.Tweet;
 import com.codepath.apps.mysimpletweet.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -47,8 +52,6 @@ import static com.loopj.android.http.AsyncHttpClient.log;
  */
 
 public class ComposeFragment extends DialogFragment {
-    
-
 
 
     private EditText etContent;
@@ -71,9 +74,39 @@ public class ComposeFragment extends DialogFragment {
         return frag;
     }
 
+    private void populateProfile() {
+
+        client.getUserInfo( new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                Account account = Account.fromJson(json);
+                uName.setText(account.getName());
+                uAccount.setText(account.getScreenName());
+                Glide.with(getContext())
+                        .load(account.getUserInfo())
+                        .into(img_profile);
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("debug",errorResponse.toString());
+            }
+        });
+
+
+
+    }
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
 
         View view = inflater.inflate(R.layout.fragment_edit, container);
         uAccount = (TextView)view.findViewById(R.id.uAccoun);
@@ -82,6 +115,8 @@ public class ComposeFragment extends DialogFragment {
 
         tweetCount = (TextView) view.findViewById(R.id.tweetCount);
         etContent = (EditText) view.findViewById(R.id.etContent);
+        etContent.setSingleLine(false);
+        client = getRestClient();
         etContent.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
@@ -95,10 +130,11 @@ public class ComposeFragment extends DialogFragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        populateProfile();
 
         btn_tweet = (Button) view.findViewById(R.id.btn_Tweet);
 
-//        btn_tweet.setOnEditorActionListener(this);
+
 
         btn_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,31 +155,26 @@ public class ComposeFragment extends DialogFragment {
 
 
     private void postTweet() {
-
-
-
-
-
         final String tweetBody = etContent.getText().toString();
+
         client.postUpdateStatus(tweetBody, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                Log.d("d",json.toString());
 
-
+                dismiss();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 
+                dismiss();
             }
         });
 
 
 
     }
-
-
-
 
 
 

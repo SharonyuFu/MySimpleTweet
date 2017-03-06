@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweet.fragment.ComposeFragment;
 import com.codepath.apps.mysimpletweet.models.Tweet;
@@ -28,20 +29,17 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
 import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.id;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
-public class TimelineActivity extends AppCompatActivity{
+public class TimelineActivity extends AppCompatActivity implements ComposeDialogListener {
 
     private TwitterClient client;
     private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet>tweets;
     private ListView lvTweets;
-
-
-
-
 
 
     @Override
@@ -73,18 +71,25 @@ public class TimelineActivity extends AppCompatActivity{
 
     }
 
-    private void loadNextDataFromApi(int page) {
-//        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                super.onSuccess(statusCode, headers, response);
-//
-//                tweets.addAll(Tweet.fromJSONArray(response));
-//                aTweets.notify(aTweets.getCount(), tweets.size() - 1);
-//
-//            }
-//        });
+    private void loadNextDataFromApi(long maxId) {
 
+        Tweet tweet = aTweets.getItem(aTweets.getCount()-1);
+        maxId = tweet.getUId()-1;
+
+        client.getHomeTimeline(maxId,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                aTweets.addAll(Tweet.fromJSONArray(json));
+                aTweets.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("debug",errorResponse.toString());
+            }
+
+        });
 
 
 
@@ -94,12 +99,11 @@ public class TimelineActivity extends AppCompatActivity{
 
     private void populateTimeline() {
 
-        client.getHomeTimeline( new JsonHttpResponseHandler(){
+        client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                Log.d("debug",json.toString());
                 aTweets.addAll(Tweet.fromJSONArray(json));
-
-
             }
 
             @Override
@@ -111,6 +115,8 @@ public class TimelineActivity extends AppCompatActivity{
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,6 +139,12 @@ public class TimelineActivity extends AppCompatActivity{
         ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title");
         editNameDialogFragment.show(fm, "fragment_edit_name");
 
+
+    }
+
+    @Override
+    public void onComposed(Tweet tweet) {
+        aTweets.add(tweet);
 
     }
 }
