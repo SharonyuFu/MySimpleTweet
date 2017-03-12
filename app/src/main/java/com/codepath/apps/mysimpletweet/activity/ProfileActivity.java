@@ -12,9 +12,11 @@ import com.codepath.apps.mysimpletweet.TwitterApplication;
 import com.codepath.apps.mysimpletweet.TwitterClient;
 import com.codepath.apps.mysimpletweet.fragment.TweetsListFragment;
 import com.codepath.apps.mysimpletweet.fragment.UserTimelineFragment;
+import com.codepath.apps.mysimpletweet.models.Tweet;
 import com.codepath.apps.mysimpletweet.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -28,8 +30,6 @@ import static com.raizlabs.android.dbflow.config.FlowLog.Level.I;
 public class ProfileActivity extends AppCompatActivity {
     TwitterClient client;
     User user;
-    String screenName;
-    Long Id;
 
 
     @Override
@@ -39,8 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
 
 
-        screenName = getIntent().getStringExtra("screen_name");
-        Id = getIntent().getLongExtra("user_id",Id);
+        String screenName = getIntent().getStringExtra("screen_name");
+
 
 
         if(savedInstanceState == null){
@@ -49,19 +49,31 @@ public class ProfileActivity extends AppCompatActivity {
             ft.replace(R.id.flContainer,UserTimelineFragment.newInstance(screenName));
             ft.commit();
         }
-        
-
 
         getSupportActionBar().setTitle("@" + screenName);
-        client.getUserInfoTwo(Id,screenName,new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                user = User.fromJson(response);
+        if (screenName == null){
+            client.getUserInfo(new JsonHttpResponseHandler(){
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                populateProfileHeader(user);
-            }
-        });
+                    user = User.fromJson(response);
+
+                    populateProfileHeader(user);
+                }
+            });
+
+        }else{
+            client.getUserInfoTwo(screenName,new JsonHttpResponseHandler(){
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    log.d("d",response.toString());
+                    user = User.fromJson(response);
+                    populateProfileHeader(user);
+                }
+            });
+
+        }
 
     }
 

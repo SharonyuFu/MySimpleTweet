@@ -66,7 +66,6 @@ public class TimelineActivity extends AppCompatActivity {
         Intent i = new Intent(this,ProfileActivity.class);
         startActivity(i);
 
-
     }
 
     public void edit(MenuItem mi) {
@@ -74,7 +73,6 @@ public class TimelineActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title");
         editNameDialogFragment.show(fm, "fragment_edit_name");
-
 
 
     }
