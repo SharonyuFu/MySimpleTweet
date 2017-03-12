@@ -25,6 +25,7 @@ import static com.codepath.apps.mysimpletweet.R.id.ivProfileImage;
 import static com.codepath.apps.mysimpletweet.R.id.tvBody;
 import static com.codepath.apps.mysimpletweet.R.id.tvUserName;
 import static com.codepath.apps.mysimpletweet.R.string.tweet;
+import static com.loopj.android.http.AsyncHttpClient.log;
 
 /**
  * Created by sharonyu on 2017/3/3.
@@ -83,6 +84,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), ProfileActivity.class);
                 i.putExtra("screen_name", tweet.getUser().getScreenName());
+                i.putExtra("user_id", tweet.getUser().getUid());
                 getContext().startActivity(i);
             }
         });

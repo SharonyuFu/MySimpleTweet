@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweet.R;
 import com.codepath.apps.mysimpletweet.TwitterApplication;
 import com.codepath.apps.mysimpletweet.TwitterClient;
+import com.codepath.apps.mysimpletweet.fragment.TweetsListFragment;
 import com.codepath.apps.mysimpletweet.fragment.UserTimelineFragment;
 import com.codepath.apps.mysimpletweet.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -18,13 +19,18 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.os.Build.ID;
 import static com.codepath.apps.mysimpletweet.R.string.account;
 import static com.loopj.android.http.AsyncHttpClient.log;
+import static com.raizlabs.android.dbflow.config.FlowLog.Level.I;
 
 
 public class ProfileActivity extends AppCompatActivity {
     TwitterClient client;
     User user;
+    String screenName;
+    Long Id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +39,26 @@ public class ProfileActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
 
 
-        String screenName = getIntent().getStringExtra("screen_name");
+        screenName = getIntent().getStringExtra("screen_name");
+        Id = getIntent().getLongExtra("user_id",Id);
+
+
         if(savedInstanceState == null){
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer,UserTimelineFragment.newInstance(screenName));
             ft.commit();
         }
+        
 
-        client.getUserInfo( new JsonHttpResponseHandler(){
+
+        getSupportActionBar().setTitle("@" + screenName);
+        client.getUserInfoTwo(Id,screenName,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
                 user = User.fromJson(response);
-                String screenName = getIntent().getStringExtra("screen_name");
-                getSupportActionBar().setTitle("@" + screenName);
+
                 populateProfileHeader(user);
             }
         });
