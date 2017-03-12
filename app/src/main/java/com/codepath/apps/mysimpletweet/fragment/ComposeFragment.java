@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.app.Activity.RESULT_OK;
 import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
@@ -146,12 +147,17 @@ public class ComposeFragment extends DialogFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 Log.d("d",json.toString());
 
-                Tweet tweet = new Tweet();
+                Tweet tweet = Tweet.fromJSON(json);
+                Bundle b = new Bundle();
+                b.putString("tweet",tweet.toString());
+                dismiss();
 
-                listener.onTweetPost(tweet.fromJSON(json));
-                log.d("d",tweet.fromJSON(json).toString());
-                ComposeDialogListener composeDialogListener = (ComposeDialogListener)getActivity();
-                composeDialogListener.onComposed(tweet.fromJSON(json));
+
+
+//                listener.onTweetPost(tweet.fromJSON(json));
+//                log.d("d",tweet.fromJSON(json).toString());
+//                ComposeDialogListener composeDialogListener = (ComposeDialogListener)getActivity();
+//                composeDialogListener.onComposed(tweet.fromJSON(json));
                 dismiss();
 
             }

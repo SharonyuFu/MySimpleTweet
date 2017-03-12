@@ -36,18 +36,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
 
 
+
 //    public TweetsArrayAdapter(Context context, List <Tweet> tweets){
 //        super(context,android.R.layout.activity_list_item,tweets);
 //    }
-    public TweetsArrayAdapter(FragmentActivity activity, List<Tweet> tweets,
-                               TweetsListFragment.ImageClickListener imageListener) {
+    public TweetsArrayAdapter(FragmentActivity activity, List<Tweet> tweets, TweetsListFragment.ImageClickListener imageListener) {
         super(activity, 0, tweets);
         imgClickListener = imageListener;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
@@ -77,23 +77,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 .load(tweet.getUser().getProfilImgUrl())
                 .into(holder.ivProfileImage);
 
-        if( imgClickListener != null ){
-            holder.ivProfileImage.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText( getContext(), "Image Clicked", Toast.LENGTH_SHORT).show();
-                    String screenName = (String) v.getTag();
-                    imgClickListener.onImageClick(screenName);
-                }
-            });
-        }else{
-            holder.ivProfileImage.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "image clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("screen_name", tweet.getUser().getScreenName());
+                getContext().startActivity(i);
+            }
+        });
+
 
 
         return convertView;

@@ -1,8 +1,12 @@
 package com.codepath.apps.mysimpletweet.models;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.utils.StreamUtils;
+
+import java.util.List;
 
 /**
  * Created by sharonyu on 2017/3/3.
@@ -60,6 +64,7 @@ public class User {
         return u;
 
     }
+
 
     public int getFollowersCount() {
         return followersCount;

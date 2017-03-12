@@ -45,7 +45,8 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJson(response);
-                getSupportActionBar().setTitle("@" + user.getScreenName());
+                String screenName = getIntent().getStringExtra("screen_name");
+                getSupportActionBar().setTitle("@" + screenName);
                 populateProfileHeader(user);
             }
         });
