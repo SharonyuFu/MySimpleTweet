@@ -1,20 +1,30 @@
 package com.codepath.apps.mysimpletweet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweet.activity.ProfileActivity;
+import com.codepath.apps.mysimpletweet.fragment.TweetsListFragment;
 import com.codepath.apps.mysimpletweet.models.Tweet;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static com.codepath.apps.mysimpletweet.R.id.ivProfileImage;
+import static com.codepath.apps.mysimpletweet.R.id.tvBody;
+import static com.codepath.apps.mysimpletweet.R.id.tvUserName;
+import static com.codepath.apps.mysimpletweet.R.string.tweet;
 
 /**
  * Created by sharonyu on 2017/3/3.
@@ -22,12 +32,18 @@ import java.util.List;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private TweetsListFragment.ImageClickListener imgClickListener=null;
 
 
-    public TweetsArrayAdapter(Context context, List <Tweet> tweets){
-        super(context,android.R.layout.activity_list_item,tweets);
+
+//    public TweetsArrayAdapter(Context context, List <Tweet> tweets){
+//        super(context,android.R.layout.activity_list_item,tweets);
+//    }
+    public TweetsArrayAdapter(FragmentActivity activity, List<Tweet> tweets,
+                               TweetsListFragment.ImageClickListener imageListener) {
+        super(activity, 0, tweets);
+        imgClickListener = imageListener;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -37,26 +53,58 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
         }
 
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView time = (TextView) convertView.findViewById(R.id.timw);
+        ViewHolder holder=null;
+        if( convertView.getTag() == null ){
+            holder = new ViewHolder();
+            holder.ivProfileImage = (ImageView) convertView.findViewById(ivProfileImage);
+            holder.tvUserName = (TextView) convertView.findViewById(tvUserName);
+            holder.tvBody = (TextView) convertView.findViewById(tvBody);
+            holder.time = (TextView) convertView.findViewById(R.id.timw);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-        tvUserName.setText(tweet.getUser().getScreenName());
-        tvBody.setText(tweet.getBody());
-        time.setText(tweet.getRelativeTimeAgo(tweet.getCreatedAt()));
 
 
-        ivProfileImage.setImageResource(android.R.color.transparent);
+
+        holder.tvUserName.setText(tweet.getUser().getScreenName());
+        holder.tvBody.setText(tweet.getBody());
+        holder.time.setText(tweet.getRelativeTimeAgo(tweet.getCreatedAt()));
+
+
+        holder.ivProfileImage.setImageResource(android.R.color.transparent);
         Glide.with(getContext())
                 .load(tweet.getUser().getProfilImgUrl())
-                .into(ivProfileImage);
+                .into(holder.ivProfileImage);
 
-
-
-
+        if( imgClickListener != null ){
+            holder.ivProfileImage.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText( getContext(), "Image Clicked", Toast.LENGTH_SHORT).show();
+                    String screenName = (String) v.getTag();
+                    imgClickListener.onImageClick(screenName);
+                }
+            });
+        }else{
+            holder.ivProfileImage.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "image clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
 
         return convertView;
     }
+
+    public class ViewHolder{
+        ImageView ivProfileImage;
+        TextView tvUserName;
+        TextView tvBody;
+        TextView time;
+
+    }
+
 }

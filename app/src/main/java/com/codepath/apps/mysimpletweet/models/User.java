@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweet.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scribe.utils.StreamUtils;
 
 /**
  * Created by sharonyu on 2017/3/3.
@@ -12,6 +13,9 @@ public class User {
     private Long uid;
     private String screenName;
     private String profilImgUrl;
+    private String tagLine;
+    private int followersCount;
+    private int followingsCount;
 
     public String getName() {
         return name;
@@ -29,6 +33,14 @@ public class User {
         return uid;
     }
 
+    public String getTagLine() {
+        return tagLine;
+    }
+
+    public int getFollowingsCount() {
+        return followingsCount;
+    }
+
     public static User fromJson(JSONObject jsonObject){
         User u = new User();
 
@@ -37,6 +49,9 @@ public class User {
             u.uid = jsonObject.getLong("id");
             u.screenName = jsonObject.getString("screen_name");
             u.profilImgUrl= jsonObject.getString("profile_image_url");
+            u.tagLine = jsonObject.getString("description");
+            u.followersCount= jsonObject.getInt("followers_count");
+            u.followingsCount= jsonObject.getInt("friends_count");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -44,5 +59,9 @@ public class User {
 
         return u;
 
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
     }
 }

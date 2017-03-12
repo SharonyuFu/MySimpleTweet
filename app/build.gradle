@@ -11,7 +11,6 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-
     // Related to https://github.com/scribejava/scribejava/issues/480
     // Scribe expects Java 7 or this custom Apache library
     lintOptions {
@@ -45,20 +44,23 @@ dependencies {
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:percent:${supportLibVersion}"
+    compile "com.android.support:support-vector-drawable:${supportLibVersion}"
+    // VectorDrawableCompat
+    compile "com.android.support:animated-vector-drawable:${supportLibVersion}"
+    compile "com.android.support:transition:${supportLibVersion}"
+    compile "com.android.support:support-annotations:${supportLibVersion}"
+
     compile 'com.codepath.libraries:android-oauth-handler:1.1.0'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:design:25.2.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
-    compile "com.android.support:percent:${supportLibVersion}"
-    compile "com.android.support:support-vector-drawable:${supportLibVersion}" // VectorDrawableCompat
-    compile "com.android.support:animated-vector-drawable:${supportLibVersion}"
-    compile "com.android.support:transition:${supportLibVersion}"
-    compile "com.android.support:support-annotations:${supportLibVersion}"
     compile 'com.github.bumptech.glide:glide:3.5.2'
-
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
 }

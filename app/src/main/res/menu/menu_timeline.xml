@@ -4,9 +4,16 @@
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/edit"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="Compose"
         android:onClick="edit">
+    </item>
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@mipmap/ic_profile"
+        app:showAsAction="ifRoom"
+        android:title="Compose"
+        android:onClick="onProfleView">
     </item>
 
 </menu>

@@ -1,54 +1,34 @@
 package com.codepath.apps.mysimpletweet.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweet.ComposeDialogListener;
 import com.codepath.apps.mysimpletweet.R;
-import com.codepath.apps.mysimpletweet.TimelineActivity;
 import com.codepath.apps.mysimpletweet.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweet.TwitterClient;
 import com.codepath.apps.mysimpletweet.models.Account;
 import com.codepath.apps.mysimpletweet.models.Tweet;
-import com.codepath.apps.mysimpletweet.models.User;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import cz.msebera.android.httpclient.Header;
 
-import static android.app.Activity.RESULT_OK;
-import static com.codepath.apps.mysimpletweet.R.id.ivProfileImage;
-import static com.codepath.apps.mysimpletweet.R.string.tweet;
 import static com.codepath.apps.mysimpletweet.TwitterApplication.getRestClient;
-import static com.codepath.apps.mysimpletweet.models.SampleModel_Table.name;
 import static com.loopj.android.http.AsyncHttpClient.log;
-import static java.util.Collections.addAll;
 
 /**
  * Created by sharonyu on 2017/3/5.
